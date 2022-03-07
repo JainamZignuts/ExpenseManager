@@ -197,7 +197,8 @@ DeleteTransaction = (req, res) => {
                     console.log(del);
                     res.status(200).json({
                       message: 'Transaction Deleted',
-                      record,
+                      account:record,
+                      DeletedTransaction: del
                     });
                   });
                 });
