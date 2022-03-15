@@ -1,97 +1,130 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const rescode = sails.config.constants.httpStatusCode;
+const msg = sails.config.messages.User;
 
-UserSignup = (req, res) => {
-  Users.find({ email: req.body.email }).then((user) => {
-    //check for an existing email and password's length
-    if (user.length >= 1) {
-      return res.status(409).json({
-        message: 'This email already exists!',
+userSignup = async (req, res) => {
+  try {
+    //check for existing user
+    let user = await Users.findOne({ email: req.body.email });
+    if (user) {
+      //if user found
+      return res.status(rescode.CONFLICT).json({
+        message: msg.DuplicateEmail,
       });
+      //checks for password length
     } else if (req.body.password.length < 8) {
       return res.status(400).json({
-        message: 'Password must have min 8 character',
+        message: msg.MinPasswordLength,
       });
     } else {
-      //hashing password
-      bcrypt.hash(req.body.password, 10, (err, hash) => {
+      //hash the password
+      bcrypt.hash(req.body.password, 10, async (err, hash) => {
         if (err) {
           return res.status(500).json({
             error: err,
           });
         } else {
-          //creating user
-          Users.create({
+          //creates user
+          let result = await Users.create({
             firstname: req.body.firstname,
             lastname: req.body.lastname,
             email: req.body.email,
             password: hash,
-          })
-            .fetch()
-            .then((result) => {
-              console.log(result);
-              res.send(
-                'User created \n Welcome email sent \n Default account created'
-              );
-            })
-            .catch((err) => {
-              console.log(err);
-              res.status(500).json({
-                error: err,
-              });
-            });
+          }).fetch();
+          console.log(result);
+          res.status(rescode.CREATED);
+          res.send(
+            msg.UserCreated +
+              '\n' +
+              msg.WelcomeEmail +
+              '\n' +
+              msg.DefaultAccount
+          );
         }
       });
     }
-  });
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
+    });
+  }
 };
 
-UserLogin = (req, res) => {
-  Users.find({ email: req.body.email })
-    .then((users) => {
-      if (users.length < 1) {
-        return res.status(401).json({
-          message: 'Auth failed',
+userLogin = async (req, res) => {
+  try {
+    //check for user in database
+    let users = await Users.findOne({ email: req.body.email });
+    if (!users) {
+      //user not in database
+      return res.status(rescode.UNAUTHORIZED).json({
+        message: msg.AuthError,
+      });
+    }
+    //comparing passwords
+    bcrypt.compare(req.body.password, users.password, async (err, result) => {
+      if (err) {
+        return res.status(rescode.UNAUTHORIZED).json({
+          message: msg.AuthError,
         });
       }
-      //comparing password
-      bcrypt.compare(req.body.password, users[0].password, (err, result) => {
-        if (err) {
-          return res.status(401).json({
-            message: 'Auth failed',
-          });
-        }
-        if (result) {
-          //generating token
-          const token = jwt.sign(
-            {
-              email: users[0].email,
-              userId: users[0].id,
-            },
-            process.env.JWT_KEY,
-            {
-              expiresIn: '2h',
-            }
-          );
-          return res.status(200).json({
-            message: 'Auth successful',
-            token: token,
-          });
-        }
-        res.status(401).json({
-          message: 'Auth failed',
+      if (result) {
+        //generating token
+        const token = jwt.sign(
+          //payload
+          {
+            email: users.email,
+            userId: users.id,
+          },
+          //secret key
+          process.env.JWT_KEY,
+          //expiration time
+          {
+            expiresIn: '1h',
+          }
+        );
+        //updating token for user
+        await Users.updateOne({ id: users.id }).set({
+          token: token,
         });
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
+
+        return res.status(rescode.OK).json({
+          message: msg.Login,
+          token: token,
+        });
+      }
+      res.status(rescode.UNAUTHORIZED).json({
+        message: msg.AuthError,
       });
     });
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
+    });
+  }
+};
+
+userLogout = async (req, res) => {
+  try {
+    //update token value to null in user's data
+    await Users.updateOne({ id: req.userData.userId }).set({
+      token: null,
+    });
+    res.status(rescode.OK).json({
+      message: msg.Logout,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
+    });
+  }
 };
 
 module.exports = {
-  UserSignup,
-  UserLogin,
+  userSignup,
+  userLogin,
+  userLogout,
 };

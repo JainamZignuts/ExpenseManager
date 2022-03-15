@@ -16,12 +16,14 @@ module.exports = {
       defaultsTo: 0,
     },
 
-    //Add a reference to User
+    //reference to User
     owners: {
       collection: 'users',
       via: 'account',
       through: 'accountuser',
     },
+
+    //reference to Transactions
     transactions: {
       collection: 'transactions',
       via: 'owneraccount',

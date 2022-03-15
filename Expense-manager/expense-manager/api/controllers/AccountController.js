@@ -5,160 +5,104 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+const rescode = sails.config.constants.httpStatusCode;
+const msg = sails.config.messages.Account;
 
-GetAccounts = (req, res) => {
-  Users.find({
-    where: { id: req.userData.userId },
-    select: ['email', 'firstname', 'lastname'],
-  })
-    .populate('accounts')
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
-      });
+getAccounts = async (req, res) => {
+  try {
+    //get all account's details associated with logged in user.
+    let result = await Users.find({
+      where: { id: req.userData.userId },
+      select: ['email', 'firstname', 'lastname'],
+    }).populate('accounts');
+    res.status(rescode.OK).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
     });
+  }
 };
 
-GetParticularAccount = (req, res) => {
-  Account.findOne({ id: req.params.id })
-    .populate('owners', { select: ['firstname', 'lastname', 'email'] })
-    .populate('transactions')
-    .then((result) => {
-      let uid = false;
-      //getting all owner Ids and checking it with logged in user
-      result.owners.forEach((data) => {
-        console.log(data.id);
-        if (data.id === req.userData.userId) {
-          uid = true;
-        }
-        console.log(uid);
-      });
-      if (uid) {
-        return res.status(200).json(result);
-      } else {
-        return res.status(403).json({
-          message: 'Access Denied',
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
-      });
+getParticularAccount = async (req, res) => {
+  try {
+    //get particular account's details along with its transactions and owners.
+    let result = await Account.findOne({ id: req.params.id })
+      .populate('owners', { select: ['firstname', 'lastname', 'email'] })
+      .populate('transactions');
+    res.status(rescode.OK).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
     });
+  }
 };
 
-CreateAccount = (req, res) => {
-  Account.create({
-    accountname: req.body.accountname,
-    owners: req.userData.userId,
-  })
-    .fetch()
-    .then((result) => {
-      console.log(result);
-      res.json({
-        message: 'Account Created',
-        result,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
-      });
+createAccount = async (req, res) => {
+  try {
+    //creates an account
+    let result = await Account.create({
+      accountname: req.body.accountname,
+      owners: req.userData.userId,
+    }).fetch();
+    console.log(result);
+    res.status(rescode.CREATED).json({
+      message: msg.AccountCreated,
+      result,
     });
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
+    });
+  }
 };
 
-UpdateAccount = (req, res) => {
-  const id = req.params.id;
-  Account.findOne({ id: id })
-    .populate('owners')
-    .then((rec) => {
-      let uid = false;
-      rec.owners.forEach((data) => {
-        console.log(data.id);
-        if (data.id === req.userData.userId) {
-          uid = true;
-        }
-        console.log(uid);
-      });
-      if (uid) {
-        Account.updateOne({ id: id })
-          .set({
-            accountname: req.body.accountname,
-          })
-          .then((result) => {
-            console.log(result);
-            res.status(200).json({
-              message: 'Account updated',
-              result,
-            });
-          });
-      } else {
-        return res.status(403).json({
-          message: 'Access Denied',
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
-      });
+updateAccount = async (req, res) => {
+  try {
+    const id = req.params.id;
+    //updates accountname
+    let result = await Account.updateOne({ id: id }).set({
+      accountname: req.body.accountname,
     });
+    console.log(result);
+    res.status(rescode.OK).json({
+      message: msg.AccountUpdated,
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
+    });
+  }
 };
 
-DeleteAccount = (req, res) => {
-  const id = req.params.id;
-  Account.findOne({ id: id })
-    .populate('owners')
-    .then((rec) => {
-      let uid = false;
-      rec.owners.forEach((data) => {
-        console.log(data.id);
-        if (data.id === req.userData.userId) {
-          uid = true;
-        }
-        console.log(uid);
-      });
-      if (uid) {
-        Transactions.find({ owneraccount: id }).then((rec) => {
-          console.log(rec);
-          Transactions.destroy({ owneraccount: id })
-            .fetch()
-            .then((record) => {
-              console.log(record);
-              Account.destroyOne({ id: id }).then((result) => {
-                console.log(result);
-                res.status(200).json({
-                  message: 'Account deleted',
-                });
-              });
-            });
-        });
-      } else {
-        return res.status(403).json({
-          message: 'Access Denied',
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
-      });
+deleteAccount = async (req, res) => {
+  try {
+    const id = req.params.id;
+    //deletes transactions from database associated with the account that is going to be deleted.
+    let record = await Transactions.destroy({ owneraccount: id }).fetch();
+    console.log(record);
+    //deletes the requested account
+    let result = await Account.destroyOne({ id: id });
+    console.log(result);
+    res.status(rescode.OK).json({
+      message: msg.AccountDeleted,
     });
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
+    });
+  }
 };
 
 module.exports = {
-  GetAccounts,
-  GetParticularAccount,
-  CreateAccount,
-  UpdateAccount,
-  DeleteAccount,
+  getAccounts,
+  getParticularAccount,
+  createAccount,
+  updateAccount,
+  deleteAccount,
 };

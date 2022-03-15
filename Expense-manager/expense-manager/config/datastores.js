@@ -49,7 +49,8 @@ module.exports.datastores = {
     *                                                                          *
     ***************************************************************************/
     adapter: require('sails-mongo'),
-    url: 'mongodb+srv://Jainamshah:Jainam3428@expmanager.y38ph.mongodb.net/expmanager?retryWrites=true&w=majority'
+    // url: 'mongodb+srv://Jainamshah:Jainam3428@expmanager.y38ph.mongodb.net/expmanager?retryWrites=true&w=majority'
+    url: process.env.dburl
 
   }
 

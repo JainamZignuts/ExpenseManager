@@ -9,20 +9,21 @@
  */
 
 module.exports.routes = {
-  'POST /signup' : 'UserController.UserSignup',
-  'POST /login' : 'UserController.UserLogin',
+  'POST /signup' : 'UserController.userSignup',
+  'POST /login' : 'UserController.userLogin',
+  'POST /logout' : 'UserController.userLogout',
 
-  'GET /home' : 'AccountController.GetAccounts',
-  'GET /home/account/:id' : 'AccountController.GetParticularAccount',
-  'POST /home' : 'AccountController.CreateAccount',
-  'PATCH /home/update/:id' : 'AccountController.UpdateAccount',
-  'DELETE /home/delete/:id' : 'AccountController.DeleteAccount',
+  'GET /home' : 'AccountController.getAccounts',
+  'GET /home/account/:id' : 'AccountController.getParticularAccount',
+  'POST /home' : 'AccountController.createAccount',
+  'PATCH /home/update/:id' : 'AccountController.updateAccount',
+  'DELETE /home/delete/:id' : 'AccountController.deleteAccount',
 
-  'GET /home/account/:id/transactions' : 'TransactionsController.GetTransactions',
-  'POST /home/transaction/create/:id' : 'TransactionsController.CreateTransaction',
-  'PATCH /home/transaction/update/:id' : 'TransactionsController.UpdateTransaction',
-  'DELETE /home/transaction/delete/:id' : 'TransactionsController.DeleteTransaction',
+  'GET /home/account/:id/transactions' : 'TransactionsController.getTransactions',
+  'POST /home/transaction/create/:id' : 'TransactionsController.createTransaction',
+  'PATCH /home/transaction/update/:id' : 'TransactionsController.updateTransaction',
+  'DELETE /home/transaction/delete/:id' : 'TransactionsController.deleteTransaction',
 
-  'POST /home/addmember/:id' : 'MemberController.AddMembers',
-  'POST /home/deletemember/:id' : 'MemberController.DeleteMembers'
+  'POST /home/addmember/:id' : 'MemberController.addMembers',
+  'POST /home/deletemember/:id' : 'MemberController.deleteMembers'
 };

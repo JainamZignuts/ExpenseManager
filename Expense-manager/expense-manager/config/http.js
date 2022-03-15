@@ -9,8 +9,6 @@
  * https://sailsjs.com/config/http
  */
 
-// require('../api/models/Users');
-// const jwt = require('jsonwebtoken');
 
 module.exports.http = {
   /****************************************************************************
@@ -35,7 +33,6 @@ module.exports.http = {
     //   'session',
     //   'bodyParser',
     //   'compress',
-    // 'auth',
     //   'poweredBy',
     //   'router',
     //   'www',

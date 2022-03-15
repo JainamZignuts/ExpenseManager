@@ -19,6 +19,11 @@ module.exports = {
       type: 'number',
       required: true,
     },
+    user:{
+      model: 'users'
+    },
+
+    //reference to account
     owneraccount: {
       model: 'account',
     },

@@ -1,7 +1,7 @@
 module.exports = {
   friendlyName: 'Send welcome email',
 
-  description: '',
+  description: 'Sends welcome email to new user.',
 
   inputs: {
     to: {
@@ -26,6 +26,7 @@ module.exports = {
         pass: '33f74670c14b0a',
       },
     });
+    //set email details
     var data = {
       from: 'expensemanager@gmail.com',
       to: inputs.to,
@@ -33,6 +34,7 @@ module.exports = {
       text: 'Welcome to expense manager application',
     };
     console.log(data);
+    //send email with details provided
     transport.sendMail(data, (err) => {
       if (err) {
         console.log('Error occured : ' + err);

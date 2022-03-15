@@ -18,8 +18,12 @@ module.exports = {
       required: true,
       minLength: 8,
     },
+    token: {
+      type: 'string',
+      allowNull: true
+    },
 
-    // Add a reference to account
+    //reference to account
     accounts: {
       collection: 'account',
       via: 'owners',
@@ -27,11 +31,17 @@ module.exports = {
     },
   },
 
+  customToJSON: function(){
+    return _.omit(this, ['createdAt', 'updatedAt', 'password', 'token']);
+  },
+
   afterCreate: async function (users, proceed) {
     try {
+      //calling welcome email helper
       await sails.helpers.sendWelcomeEmail.with({
         to: users.email,
       });
+      //creates user's default account
       let acc = await Account.create({
         accountname: users.firstname + ' default',
         owners: users.id,

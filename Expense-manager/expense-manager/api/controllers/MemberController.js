@@ -5,79 +5,88 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
-AddMembers = (req, res) => {
-  Account.findOne({ id: req.params.id })
-    .then(() => {
-      Users.findOne({ email: req.body.email }).then((record) => {
-        if (record) {
-          AccountUser.findOne({
-            account: req.params.id,
-            owners: record.id,
-          }).then((data) => {
-            console.log(data);
-            if (data) {
-              res.status(400).json({
-                message: 'Member already exists',
-              });
-            } else {
-              Account.addToCollection(req.params.id, 'owners')
-                .members([record.id])
-                .then(() => {
-                  res.ok({ message: 'Member Added' });
-                });
-            }
-          });
-        } else {
-          return res.status(401).json({
-            error: 'User does not exist',
-          });
-        }
+const rescode = sails.config.constants.httpStatusCode;
+const msg = sails.config.messages.Member;
+
+addMembers = async (req, res) => {
+  try {
+    let record = await Users.findOne({ email: req.body.email });
+    if (record) {
+      //if user found
+      //checks for existing member
+      let data = await AccountUser.findOne({
+        account: req.params.id,
+        owners: record.id,
       });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
+      console.log(data);
+      if (data) {
+        //if given user is member of thst account already
+        res.status(rescode.CONFLICT).json({
+          message: msg.MemberExists,
+        });
+      } else {
+        //adds user to the account as member
+        await Account.addToCollection(req.params.id, 'owners').members([
+          record.id,
+        ]);
+        res.status(rescode.CREATED).json({
+          message: msg.MemberAdded,
+        });
+      }
+    } else {
+      //user does not exists in database
+      return res.status(rescode.NOT_FOUND).json({
+        error: msg.UserNotExists,
       });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: error,
     });
+  }
 };
 
-DeleteMembers = (req, res) => {
-  Account.findOne({ id: req.params.id })
-    .then(() => {
-      Users.findOne({ email: req.body.email }).then((record) => {
-        if (record) {
-          AccountUser.find({ account: req.params.id, owners: record.id }).then(
-            (data) => {
-              if (data.length >= 1) {
-                Account.removeFromCollection(req.params.id, 'owners')
-                  .members([record.id])
-                  .then(() => {
-                    res.ok({ message: 'Member Deleted' });
-                  });
-              } else {
-                res.status(400).json({
-                  message: 'Member not found',
-                });
-              }
-            }
-          );
-        } else {
-          return res.status(401).json({
-            error: 'User does not exist',
-          });
-        }
+deleteMembers = async (req, res) => {
+  try {
+    await Account.findOne({ id: req.params.id });
+    //find the user in database from input
+    let record = await Users.findOne({ email: req.body.email });
+    if (record) {
+      let data = await AccountUser.find({
+        account: req.params.id,
+        owners: record.id,
       });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: err,
+      if (data) {
+        //if user is part of the account
+        //removes the particular member from account.
+        await Account.removeFromCollection(req.params.id, 'owners').members([
+          record.id,
+        ]);
+        res.status(rescode.OK).json({
+          message: msg.MemberDeleted,
+        });
+      } else {
+        //given user is not the member of that accoount
+        res.status(rescode.NOT_FOUND).json({
+          message: msg.MemberNotFound,
+        });
+      }
+    } else {
+      //user does not exists in database
+      return res.status(rescode.NOT_FOUND).json({
+        error: msg.UserNotExists,
       });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR).json({
+      error: err,
     });
+  }
 };
 
 module.exports = {
-  AddMembers,
-  DeleteMembers,
+  addMembers,
+  deleteMembers,
 };
