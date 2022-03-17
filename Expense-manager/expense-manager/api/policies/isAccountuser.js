@@ -22,10 +22,10 @@ module.exports = async (req, res, proceed) => {
       }
       if (uid) {
       //if logged in user is one of owner of account
-      //give access to him
+      //give access to that user
         return proceed();
       } else {
-      //deny access to him
+      //deny access to that user
         return res.status(rescode.FORBIDDEN).json({
           message: msg.AccessDenied,
         });
