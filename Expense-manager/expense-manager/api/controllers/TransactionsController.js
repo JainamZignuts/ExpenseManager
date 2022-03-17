@@ -8,6 +8,11 @@
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Transaction;
 
+/**
+ * Display all transactions for a particular account
+ *
+ * (GET /home/account/:accid/transactions)
+ */
 getTransactions = async (req, res) => {
   try {
     id = req.params.id;
@@ -33,6 +38,11 @@ getTransactions = async (req, res) => {
   }
 };
 
+/**
+ * Creates a transaction and update balance in account accordingly
+ *
+ * (POST /home/transaction/create/:accid)
+ */
 createTransaction = async (req, res) => {
   try {
     //gets account details
@@ -86,6 +96,11 @@ createTransaction = async (req, res) => {
   }
 };
 
+/**
+ * Updates a transaction and update balance in account accordingly
+ *
+ * (PATCH /home/transaction/update/:transid)
+ */
 updateTransaction = async (req, res) => {
   try {
     const id = req.params.id;
@@ -158,6 +173,11 @@ updateTransaction = async (req, res) => {
   }
 };
 
+/**
+ * Deletes a particular transaction and update balance in account
+ *
+ * (DELETE /home/transaction/delete/:transid)
+ */
 deleteTransaction = async (req, res) => {
   try {
     let id = req.params.id;

@@ -3,7 +3,7 @@ const msg = sails.config.messages.Authorization;
 
 module.exports = async (req, res, proceed) => {
   try {
-    const id = req.params.id;
+    const id = req.params.accid;
     //finds account details with owners
     let rec = await Account.findOne({ id: id }).populate('owners');
     if(rec){

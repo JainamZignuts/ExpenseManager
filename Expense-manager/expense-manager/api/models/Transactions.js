@@ -19,6 +19,7 @@ module.exports = {
       type: 'number',
       required: true,
     },
+    //reference to user
     user:{
       model: 'users'
     },

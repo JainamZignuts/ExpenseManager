@@ -8,6 +8,11 @@
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Member;
 
+/**
+ * Adds member to a particular account with user's email
+ *
+ * (POST /home/addmember/:accid)
+ */
 addMembers = async (req, res) => {
   try {
     let record = await Users.findOne({ email: req.body.email });
@@ -47,6 +52,11 @@ addMembers = async (req, res) => {
   }
 };
 
+/**
+ * Deletes a particular member from a particular account
+ *
+ * (POST /home/deletemember/:accid)
+ */
 deleteMembers = async (req, res) => {
   try {
     await Account.findOne({ id: req.params.id });

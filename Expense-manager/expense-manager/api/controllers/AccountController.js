@@ -8,6 +8,11 @@
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Account;
 
+/**
+ * Display logged in user's all accounts
+ *
+ * (GET /home)
+ */
 getAccounts = async (req, res) => {
   try {
     //get all account's details associated with logged in user.
@@ -24,10 +29,15 @@ getAccounts = async (req, res) => {
   }
 };
 
+/**
+ * Display particular account's details along with user and transaction details.
+ *
+ * (GET /home/account/:accid)
+ */
 getParticularAccount = async (req, res) => {
   try {
     //get particular account's details along with its transactions and owners.
-    let result = await Account.findOne({ id: req.params.id })
+    let result = await Account.findOne({ id: req.params.accid })
       .populate('owners', { select: ['firstname', 'lastname', 'email'] })
       .populate('transactions');
     res.status(rescode.OK).json(result);
@@ -39,11 +49,22 @@ getParticularAccount = async (req, res) => {
   }
 };
 
+/**
+ * Create an account for logged in user
+ *
+ * (POST /home)
+ */
 createAccount = async (req, res) => {
   try {
+    let name = req.body.accountname;
+    let accname = name.trim();
+    //checks for empty input value
+    if(accname.length > 0){
+      accname = accname;
+    } else { return res.send(msg.EmptyAccountName);}
     //creates an account
     let result = await Account.create({
-      accountname: req.body.accountname,
+      accountname: accname,
       owners: req.userData.userId,
     }).fetch();
     console.log(result);
@@ -59,12 +80,21 @@ createAccount = async (req, res) => {
   }
 };
 
+/**
+ * Updates the accountname of an account
+ *
+ * (PATCH /home/update/:accid)
+ */
 updateAccount = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.accid;
+    //checks for empty input value
+    if(req.body.accountname.trim().length <= 0){
+      return res.send(msg.EmptyAccountName);
+    }
     //updates accountname
     let result = await Account.updateOne({ id: id }).set({
-      accountname: req.body.accountname,
+      accountname: req.body.accountname.trim(),
     });
     console.log(result);
     res.status(rescode.OK).json({
@@ -79,9 +109,14 @@ updateAccount = async (req, res) => {
   }
 };
 
+/**
+ * Delete a particular account and also deletes all transactions related to it
+ *
+ * (DELETE /home/delete/:accid)
+ */
 deleteAccount = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.accid;
     //deletes transactions from database associated with the account that is going to be deleted.
     let record = await Transactions.destroy({ owneraccount: id }).fetch();
     console.log(record);

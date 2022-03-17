@@ -3,6 +3,11 @@ const jwt = require('jsonwebtoken');
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.User;
 
+/**
+ * signup the user and store data in database
+ *
+ * (POST /signup)
+ */
 userSignup = async (req, res) => {
   try {
     //check for existing user
@@ -25,9 +30,13 @@ userSignup = async (req, res) => {
             error: err,
           });
         } else {
+          //checks for empty input field
+          if(req.body.firstname.trim().length <= 0) {
+            return res.send(msg.EmptyFirstName);
+          }
           //creates user
           let result = await Users.create({
-            firstname: req.body.firstname,
+            firstname: req.body.firstname.trim(),
             lastname: req.body.lastname,
             email: req.body.email,
             password: hash,
@@ -52,6 +61,11 @@ userSignup = async (req, res) => {
   }
 };
 
+/**
+ * login the specified user and generates a token.
+ *
+ * (POST /login)
+ */
 userLogin = async (req, res) => {
   try {
     //check for user in database
@@ -106,6 +120,11 @@ userLogin = async (req, res) => {
   }
 };
 
+/**
+ * logout the specified user and set token value to null for that user
+ *
+ * (POST /logout)
+ */
 userLogout = async (req, res) => {
   try {
     //update token value to null in user's data
