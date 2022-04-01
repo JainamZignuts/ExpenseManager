@@ -102,7 +102,6 @@ userLogin = async (req, res) => {
         await Users.updateOne({ id: users.id }).set({
           token: token,
         });
-
         return res.status(rescode.OK).json({
           message: msg.Login,
           token: token,

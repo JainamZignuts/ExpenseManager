@@ -15,7 +15,7 @@ const msg = sails.config.messages.Transaction;
  */
 getTransactions = async (req, res) => {
   try {
-    id = req.params.id;
+    id = req.params.accid;
     //finds transactions and sort by date descending
     let result = await Transactions.find({ where: { owneraccount: id }, sort: 'createdAt DESC' })
     .populate('user');

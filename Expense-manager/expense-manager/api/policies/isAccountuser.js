@@ -16,9 +16,9 @@ module.exports = async (req, res, proceed) => {
         if (data.id === req.userData.userId) {
         //if any id matches the loop breaks
           uid = true;
+          console.log(uid);
           break;
         }
-        console.log(uid);
       }
       if (uid) {
       //if logged in user is one of owner of account
@@ -36,6 +36,7 @@ module.exports = async (req, res, proceed) => {
       });
     }
   } catch (err) {
+    console.log(err);
     return res.status(rescode.UNAUTHORIZED).json({
       message: msg.AuthError,
     });
