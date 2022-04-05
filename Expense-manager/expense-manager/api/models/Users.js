@@ -40,6 +40,8 @@ module.exports = {
       //calling welcome email helper
       await sails.helpers.sendWelcomeEmail.with({
         to: users.email,
+        firstname: users.firstname,
+        lastname: users.lastname,
       });
       //creates user's default account
       let acc = await Account.create({

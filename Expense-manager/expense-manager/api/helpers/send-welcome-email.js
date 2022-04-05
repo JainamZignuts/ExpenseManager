@@ -8,6 +8,14 @@ module.exports = {
       type: 'string',
       required: true,
     },
+    firstname: {
+      type: 'string',
+      required: true,
+    },
+    lastname: {
+      type: 'string',
+      required: true,
+    },
   },
 
   exits: {
@@ -30,8 +38,8 @@ module.exports = {
     var data = {
       from: 'expensemanager@gmail.com',
       to: inputs.to,
-      subject: 'Welcome email',
-      html: '<h1>Welcome to expense manager application</h1>',
+      subject: 'Welcome ' + inputs.firstname + ' ' + inputs.lastname,
+      html: '<h1>Hello '+inputs.firstname+' </h1><br><h2>Welcome to expense manager application</h2>',
     };
     console.log(data);
     //send email with details provided

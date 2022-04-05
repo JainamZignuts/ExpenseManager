@@ -28,34 +28,30 @@ userSignup = async (req, res) => {
       return res.send(msg.EmptyFirstName);
     } else if (req.body.lastname.trim().length <= 0) {
       return res.send(msg.EmptyLastName);
-    } else if (!pattern.test(req.body.email)){
+    } else if (!pattern.test(req.body.email)) {
       return res.badRequest('Invalid input email');
     } else {
-      //hash the password
-      bcrypt.hash(req.body.password, 10, async (err, hash) => {
-        if (err) {
-          return res.status(500).json({
-            error: err,
-          });
-        } else {
-          //creates user
-          let result = await Users.create({
-            firstname: req.body.firstname.trim(),
-            lastname: req.body.lastname,
-            email: req.body.email,
-            password: hash,
-          }).fetch();
-          console.log(result);
-          res.status(rescode.CREATED);
-          res.send(
+      //calling helper to hash the password
+      let hash = await sails.helpers.hashPassword.with({
+        password: req.body.password,
+      });
+      //creates user
+      let result = await Users.create({
+        firstname: req.body.firstname.trim(),
+        lastname: req.body.lastname,
+        email: req.body.email,
+        password: hash,
+      }).fetch();
+      console.log(result);
+      res.status(rescode.CREATED);
+      res.send(
             msg.UserCreated +
               '\n' +
               msg.WelcomeEmail +
               '\n' +
               msg.DefaultAccount
-          );
-        }
-      });
+      );
+
     }
   } catch (error) {
     console.log(error);
