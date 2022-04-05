@@ -31,7 +31,7 @@ module.exports = {
       from: 'expensemanager@gmail.com',
       to: inputs.to,
       subject: 'Welcome email',
-      text: 'Welcome to expense manager application',
+      html: '<h1>Welcome to expense manager application</h1>',
     };
     console.log(data);
     //send email with details provided

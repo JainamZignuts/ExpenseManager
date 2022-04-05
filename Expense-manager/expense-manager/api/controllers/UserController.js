@@ -12,6 +12,7 @@ userSignup = async (req, res) => {
   try {
     //check for existing user
     let user = await Users.findOne({ email: req.body.email });
+    let pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (user) {
       //if user found
       return res.status(rescode.CONFLICT).json({
@@ -22,6 +23,13 @@ userSignup = async (req, res) => {
       return res.status(400).json({
         message: msg.MinPasswordLength,
       });
+      //checks for empty input field
+    } else if (req.body.firstname.trim().length <= 0) {
+      return res.send(msg.EmptyFirstName);
+    } else if (req.body.lastname.trim().length <= 0) {
+      return res.send(msg.EmptyLastName);
+    } else if (!pattern.test(req.body.email)){
+      return res.badRequest('Invalid input email');
     } else {
       //hash the password
       bcrypt.hash(req.body.password, 10, async (err, hash) => {
@@ -30,10 +38,6 @@ userSignup = async (req, res) => {
             error: err,
           });
         } else {
-          //checks for empty input field
-          if(req.body.firstname.trim().length <= 0) {
-            return res.send(msg.EmptyFirstName);
-          }
           //creates user
           let result = await Users.create({
             firstname: req.body.firstname.trim(),
@@ -56,7 +60,7 @@ userSignup = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({
-      error: error,
+      error: error.toString(),
     });
   }
 };

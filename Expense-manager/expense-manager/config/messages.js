@@ -7,6 +7,7 @@ module.exports.messages = {
     DefaultAccount: 'User\'s default account created.',
     AuthError: 'Auth failed.',
     EmptyFirstName: 'firstname can not be blank.',
+    EmptyLastName: 'lastname can not be blank',
     Login: 'Logged in successfully.',
     Logout: 'Logged out successfully.'
   },
