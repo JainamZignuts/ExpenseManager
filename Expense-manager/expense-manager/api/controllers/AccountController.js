@@ -61,7 +61,9 @@ createAccount = async (req, res) => {
     //checks for empty input value
     if(accname.length > 0){
       accname = accname;
-    } else { return res.send(msg.EmptyAccountName);}
+    } else {
+      return res.send(msg.EmptyAccountName);
+    }
     //creates an account
     let result = await Account.create({
       accountname: accname,

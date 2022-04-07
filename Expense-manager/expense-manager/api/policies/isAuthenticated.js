@@ -1,9 +1,14 @@
+/**
+ *  Get the token, checks it in database and verify it.
+ */
+
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Authorization;
 const jwt = require('jsonwebtoken');
 module.exports = async (req, res, proceed) => {
   try {
-    //get token from hedars with 1st part that splitted with whitespace
+    //get token from headers with 1st part that splitted with whitespace
+    //eg. Bearer 'TOKEN'
     const token = req.headers.authorization.split(' ')[1];
 
     //verify token
@@ -13,7 +18,7 @@ module.exports = async (req, res, proceed) => {
     //finds user by id got from token
     let result = await Users.findOne({ id: req.userData.userId });
 
-    //stores token from user's databse
+    //stores token from user's database
     const tokendb = result.token;
 
     //matching both token

@@ -1,3 +1,8 @@
+/**
+ * check for authorization.
+ * Apply on that routes which contains account's id in url.
+ */
+
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Authorization;
 
@@ -21,7 +26,7 @@ module.exports = async (req, res, proceed) => {
         }
       }
       if (uid) {
-      //if logged in user is one of owner of account
+      //if logged in user is one of the owners of account
       //give access to that user
         return proceed();
       } else {

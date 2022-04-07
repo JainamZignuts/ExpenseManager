@@ -1,16 +1,20 @@
+/**
+ * check for authorization.
+ * Apply on that routes which contains transaction's id in url.
+ */
+
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Authorization;
 
 module.exports = async (req, res, proceed) => {
   try {
     const id = req.params.id;
-    //finds transaction from the id from url
+    //find transaction from the id from url
     let result = await Transactions.findOne({ id: id });
     if(result){
-    //finds account details with owners details associated with the transaction
-      let record = await Account.findOne({ id: result.owneraccount }).populate(
-      'owners'
-      );
+    //find account details with owners details associated with the transaction
+      let record = await Account.findOne({ id: result.owneraccount })
+      .populate('owners');
       let uid = false;
       //loops through owners
       for (data of record.owners) {
