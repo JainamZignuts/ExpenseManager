@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.User;
+// const msg1 = require('../../config/locales/en.json');
+const msg1 = sails.config.getMessages;
 
 /**
  * signup the user and store data in database
@@ -9,6 +11,7 @@ const msg = sails.config.messages.User;
  * (POST /signup)
  */
 userSignup = async (req, res) => {
+  const lang = req.getLocale();
   try {
     //check for existing user
     let user = await Users.findOne({ email: req.body.email });
@@ -16,20 +19,21 @@ userSignup = async (req, res) => {
     if (user) {
       //if user found
       return res.status(rescode.CONFLICT).json({
-        message: msg.DuplicateEmail,
+        // message: msg.DuplicateEmail,
+        message: msg1('DuplicateEmail', lang),
       });
       //checks for password length
     } else if (req.body.password.length < 8) {
       return res.status(400).json({
-        message: msg.MinPasswordLength,
+        message: msg1('MinPasswordLength', lang),
       });
       //checks for empty input field
     } else if (req.body.firstname.trim().length <= 0) {
-      return res.send(msg.EmptyFirstName);
+      return res.send(msg1('EmptyFirstName', lang));
     } else if (req.body.lastname.trim().length <= 0) {
       return res.send(msg.EmptyLastName);
     } else if (!pattern.test(req.body.email)) {
-      return res.badRequest('Invalid input email');
+      return res.badRequest(msg.InvalidEmail);
     } else {
       //calling helper to hash the password
       let hash = await sails.helpers.hashPassword.with({

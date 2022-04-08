@@ -10,6 +10,7 @@
     "dotenv": "^16.0.0",
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.7.2",
+    "path": "^0.12.7",
     "sails": "^1.5.2",
     "sails-hook-orm": "^4.0.0",
     "sails-hook-sockets": "^2.0.0",

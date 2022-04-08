@@ -8,6 +8,7 @@ module.exports.messages = {
     AuthError: 'Auth failed.',
     EmptyFirstName: 'firstname can not be blank.',
     EmptyLastName: 'lastname can not be blank',
+    InvalidEmail: 'Invalid input email',
     Login: 'Logged in successfully.',
     Logout: 'Logged out successfully.'
   },

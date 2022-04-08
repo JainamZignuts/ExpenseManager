@@ -17,13 +17,10 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': 'isAuthenticated',
+  '*': 'getLang',
   UserController: {
-    'userLogout' : 'isAuthenticated'
+    'userLogout' : 'isAuthenticated',
   },
-  // 'user/userSignup' : true,
-  // 'user/userLogin' : true,
-  // 'member/DeleteMembers':['isAuthenticated','isAccountuser']
   MemberController: {
     '*': ['isAuthenticated','isAccountuser']
   },
