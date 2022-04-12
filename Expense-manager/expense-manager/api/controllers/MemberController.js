@@ -7,6 +7,7 @@
 
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Member;
+const msg1 = sails.config.getMessages;
 
 /**
  * Adds member to a particular account with user's email
@@ -14,6 +15,7 @@ const msg = sails.config.messages.Member;
  * (POST /home/addmember/:accid)
  */
 addMembers = async (req, res) => {
+  const lang = req.getLocale();
   try {
     let record = await Users.findOne({ email: req.body.email });
     if (record) {
@@ -23,11 +25,10 @@ addMembers = async (req, res) => {
         account: req.params.id,
         owners: record.id,
       });
-      console.log(data);
       if (data) {
         //if given user is member of thst account already
         res.status(rescode.CONFLICT).json({
-          message: msg.MemberExists,
+          message: msg1('MemberExists', lang),
         });
       } else {
         //adds user to the account as member
@@ -35,13 +36,13 @@ addMembers = async (req, res) => {
           record.id,
         ]);
         res.status(rescode.CREATED).json({
-          message: msg.MemberAdded,
+          message: msg1('MemberAdded', lang),
         });
       }
     } else {
       //user does not exists in database
       return res.status(rescode.NOT_FOUND).json({
-        error: msg.UserNotExists,
+        error: msg('UserNotExists', lang),
       });
     }
   } catch (error) {
@@ -58,6 +59,7 @@ addMembers = async (req, res) => {
  * (POST /home/deletemember/:accid)
  */
 deleteMembers = async (req, res) => {
+  const lang = req.getLocale();
   try {
     await Account.findOne({ id: req.params.id });
     //find the user in database from input
@@ -74,18 +76,18 @@ deleteMembers = async (req, res) => {
           record.id,
         ]);
         res.status(rescode.OK).json({
-          message: msg.MemberDeleted,
+          message: msg1('MemberDeleted', lang),
         });
       } else {
         //given user is not the member of that accoount
         res.status(rescode.NOT_FOUND).json({
-          message: msg.MemberNotFound,
+          message: msg('MemberNotFound', lang),
         });
       }
     } else {
       //user does not exists in database
       return res.status(rescode.NOT_FOUND).json({
-        error: msg.UserNotExists,
+        error: msg('UserNotExists', lang),
       });
     }
   } catch (error) {

@@ -41,7 +41,6 @@ module.exports = {
       subject: 'Welcome ' + inputs.firstname + ' ' + inputs.lastname,
       html: '<h1>Hello '+inputs.firstname+' </h1><br><h2>Welcome to expense manager application</h2>',
     };
-    console.log(data);
     //send email with details provided
     transport.sendMail(data, (err) => {
       if (err) {

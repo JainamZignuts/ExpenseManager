@@ -7,7 +7,7 @@
 
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Account;
-
+const msg1 = sails.config.getMessages;
 /**
  * Display logged in user's all accounts
  *
@@ -55,6 +55,7 @@ getParticularAccount = async (req, res) => {
  * (POST /home)
  */
 createAccount = async (req, res) => {
+  const lang = req.getLocale();
   try {
     let name = req.body.accountname;
     let accname = name.trim();
@@ -62,16 +63,15 @@ createAccount = async (req, res) => {
     if(accname.length > 0){
       accname = accname;
     } else {
-      return res.send(msg.EmptyAccountName);
+      return res.send(msg1('EmptyAccountName', lang));
     }
     //creates an account
     let result = await Account.create({
       accountname: accname,
       owners: req.userData.userId,
     }).fetch();
-    console.log(result);
     res.status(rescode.CREATED).json({
-      message: msg.AccountCreated,
+      message: msg('AccountCreated', lang),
       result,
     });
   } catch (error) {
@@ -88,19 +88,19 @@ createAccount = async (req, res) => {
  * (PATCH /home/update/:accid)
  */
 updateAccount = async (req, res) => {
+  const lang = req.getLocale();
   try {
     const id = req.params.accid;
     //checks for empty input value
     if(req.body.accountname.trim().length <= 0){
-      return res.send(msg.EmptyAccountName);
+      return res.send(msg1('EmptyAccountName'), lang);
     }
     //updates accountname
     let result = await Account.updateOne({ id: id }).set({
       accountname: req.body.accountname.trim(),
     });
-    console.log(result);
     res.status(rescode.OK).json({
-      message: msg.AccountUpdated,
+      message: msg1('AccountUpdated', lang),
       result,
     });
   } catch (error) {
@@ -117,16 +117,15 @@ updateAccount = async (req, res) => {
  * (DELETE /home/delete/:accid)
  */
 deleteAccount = async (req, res) => {
+  const lang = req.getLocale();
   try {
     const id = req.params.accid;
     //deletes transactions from database associated with the account that is going to be deleted.
     let record = await Transactions.destroy({ owneraccount: id }).fetch();
-    console.log(record);
     //deletes the requested account
     let result = await Account.destroyOne({ id: id });
-    console.log(result);
     res.status(rescode.OK).json({
-      message: msg.AccountDeleted,
+      message: msg1('AccountDeleted', lang),
     });
   } catch (error) {
     console.log(error);

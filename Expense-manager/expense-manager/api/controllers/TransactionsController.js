@@ -7,6 +7,7 @@
 
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Transaction;
+const msg1 = sails.config.getMessages;
 
 /**
  * Display all transactions for a particular account
@@ -14,6 +15,7 @@ const msg = sails.config.messages.Transaction;
  * (GET /home/account/:accid/transactions)
  */
 getTransactions = async (req, res) => {
+  const lang = req.getLocale();
   try {
     id = req.params.accid;
     //finds transactions and sort by date descending
@@ -27,7 +29,7 @@ getTransactions = async (req, res) => {
     } else {
       //if there isn't any transaction yet
       res.status(rescode.NOT_FOUND).json({
-        message: msg.TransactionNotFound
+        message: msg1('TransactionNotFound', lang)
       });
     }
   } catch (error) {
@@ -44,6 +46,7 @@ getTransactions = async (req, res) => {
  * (POST /home/transaction/create/:accid)
  */
 createTransaction = async (req, res) => {
+  const lang = req.getLocale();
   try {
     //gets account details
     let accountData = await Account.findOne({ id: req.params.id });
@@ -57,7 +60,7 @@ createTransaction = async (req, res) => {
     } else {
       //if amount is negative sends error
       return res.status(rescode.BAD_REQUEST).json({
-        error: msg.InvalidAmount
+        error: msg1('InvalidAmount', lang)
       });
     }
     //checks the type of transaction
@@ -68,7 +71,7 @@ createTransaction = async (req, res) => {
     } else {
       //if type is other than income or expense
       return res.status(rescode.BAD_REQUEST).json({
-        error: msg.InvalidType
+        error: msg1('InvalidType', type)
       });
     }
     //creates the transaction
@@ -79,13 +82,11 @@ createTransaction = async (req, res) => {
       owneraccount: accountData.id,
       user: req.userData.userId
     }).fetch();
-    console.log(result);
     //updates balance in account
     let upd = await Account.updateOne({ id: req.params.id })
     .set({ balance: balance });
-    console.log(upd);
     res.status(rescode.OK).json({
-      message: msg.TransactionCreated,
+      message: msg1('TransactionCreated', lang),
       result: result,
       account: upd,
     });
@@ -102,6 +103,7 @@ createTransaction = async (req, res) => {
  * (PATCH /home/transaction/update/:transid)
  */
 updateTransaction = async (req, res) => {
+  const lang = req.getLocale();
   try {
     const id = req.params.id;
     let result = await Transactions.findOne({ id: id });
@@ -116,7 +118,7 @@ updateTransaction = async (req, res) => {
     } else {
       //if amount is negative sends error
       return res.status(rescode.BAD_REQUEST).json({
-        error: msg.InvalidAmount
+        error: msg1('InvalidAmount', lang)
       });
     }
     //checks the type of transaction from input
@@ -125,7 +127,7 @@ updateTransaction = async (req, res) => {
     } else {
       //if type is other than income or expense
       return res.status(rescode.BAD_REQUEST).json({
-        error: msg.InvalidType
+        error: msg1('InvalidType', lang)
       });
     }
     //gets existing transaction's type
@@ -155,13 +157,11 @@ updateTransaction = async (req, res) => {
       amount: amount,
       user: req.userData.userId
     });
-    console.log(record);
     //updates balance in account
     let upd = await Account.updateOne({ id: result.owneraccount })
     .set({ balance: balance });
-    console.log(upd);
     res.status(rescode.OK).json({
-      message: msg.TransactionUpdate,
+      message: msg1('TransactionUpdate', lang),
       record: record,
       upd: upd
     });
@@ -179,6 +179,7 @@ updateTransaction = async (req, res) => {
  * (DELETE /home/transaction/delete/:transid)
  */
 deleteTransaction = async (req, res) => {
+  const lang = req.getLocale();
   try {
     let id = req.params.id;
     let result = await Transactions.findOne({ id: id });
@@ -194,12 +195,10 @@ deleteTransaction = async (req, res) => {
     //updates balance in account
     let record = await Account.updateOne({ id: result.owneraccount })
     .set({ balance: balance });
-    console.log(record);
     //deletes the transaction
     let del = await Transactions.destroyOne({ id: id });
-    console.log(del);
     res.status(rescode.OK).json({
-      message: msg.TransactionDeleted,
+      message: msg1('TransactionDeleted', lang),
       account:record,
       DeletedTransaction: del
     });

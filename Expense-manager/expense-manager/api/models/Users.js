@@ -48,7 +48,6 @@ module.exports = {
         accountname: users.firstname + ' default',
         owners: users.id,
       }).fetch();
-      console.log(acc);
     } catch (err) {
       console.log(err);
     }

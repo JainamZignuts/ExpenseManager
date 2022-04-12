@@ -5,8 +5,10 @@
 
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Authorization;
+const msg1 = sails.config.getMessages;
 
 module.exports = async (req, res, proceed) => {
+  const lang = req.getLocale();
   try {
     const id = req.params.accid;
     //finds account details with owners
@@ -32,18 +34,18 @@ module.exports = async (req, res, proceed) => {
       } else {
       //deny access to that user
         return res.status(rescode.FORBIDDEN).json({
-          message: msg.AccessDenied,
+          message: msg1('AccessDenied', lang),
         });
       }
     } else {
       return res.status(rescode.NOT_FOUND).json({
-        error: msg.AccountNotFound
+        error: msg1('AccountNotFound', lang)
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(rescode.UNAUTHORIZED).json({
-      message: msg.AuthError,
+      message: msg1('AuthError', lang),
     });
   }
 };

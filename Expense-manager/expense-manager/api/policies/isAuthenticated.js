@@ -4,8 +4,11 @@
 
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Authorization;
+const msg1 = sails.config.getMessages;
 const jwt = require('jsonwebtoken');
+
 module.exports = async (req, res, proceed) => {
+  const lang = req.getLocale();
   try {
     //get token from headers with 1st part that splitted with whitespace
     //eg. Bearer 'TOKEN'
@@ -25,7 +28,7 @@ module.exports = async (req, res, proceed) => {
     if (token !== tokendb) {
       //if token mismatches
       return res.status(rescode.BAD_REQUEST).json({
-        message: msg.TokenMismatched,
+        message: msg1('TokenMismatched', lang),
       });
     } else {
       return proceed();
@@ -33,10 +36,10 @@ module.exports = async (req, res, proceed) => {
   } catch (err) {
     //if token expired
     if (err instanceof jwt.TokenExpiredError) {
-      return res.send(msg.TokenExpired);
+      return res.send(msg1('TokenExpired', lang));
     } else {
       return res.status(rescode.UNAUTHORIZED).json({
-        message: msg.AuthError,
+        message: msg1('AuthError', lang),
       });
     }
   }

@@ -31,9 +31,9 @@ userSignup = async (req, res) => {
     } else if (req.body.firstname.trim().length <= 0) {
       return res.send(msg1('EmptyFirstName', lang));
     } else if (req.body.lastname.trim().length <= 0) {
-      return res.send(msg.EmptyLastName);
+      return res.send(msg1('EmptyLastName'), lang);
     } else if (!pattern.test(req.body.email)) {
-      return res.badRequest(msg.InvalidEmail);
+      return res.badRequest(msg1('InvalidEmail', lang));
     } else {
       //calling helper to hash the password
       let hash = await sails.helpers.hashPassword.with({
@@ -46,14 +46,13 @@ userSignup = async (req, res) => {
         email: req.body.email,
         password: hash,
       }).fetch();
-      console.log(result);
       res.status(rescode.CREATED);
       res.send(
-            msg.UserCreated +
+            msg1('UserCreated', lang) +
               '\n' +
-              msg.WelcomeEmail +
+              msg1('WelcomeEmail', lang) +
               '\n' +
-              msg.DefaultAccount
+              msg1('DefaultAccount', lang)
       );
 
     }
@@ -71,20 +70,21 @@ userSignup = async (req, res) => {
  * (POST /login)
  */
 userLogin = async (req, res) => {
+  const lang = req.getLocale();
   try {
     //check for user in database
     let users = await Users.findOne({ email: req.body.email });
     if (!users) {
       //user not in database
       return res.status(rescode.UNAUTHORIZED).json({
-        message: msg.AuthError,
+        message: msg1('AuthError', lang),
       });
     }
     //comparing passwords
     bcrypt.compare(req.body.password, users.password, async (err, result) => {
       if (err) {
         return res.status(rescode.UNAUTHORIZED).json({
-          message: msg.AuthError,
+          message: msg1('AuthError', lang),
         });
       }
       if (result) {
@@ -107,12 +107,12 @@ userLogin = async (req, res) => {
           token: token,
         });
         return res.status(rescode.OK).json({
-          message: msg.Login,
+          message: msg1('Login', lang),
           token: token,
         });
       }
       res.status(rescode.UNAUTHORIZED).json({
-        message: msg.AuthError,
+        message: msg1('AuthError', lang),
       });
     });
   } catch (error) {
@@ -129,13 +129,14 @@ userLogin = async (req, res) => {
  * (POST /logout)
  */
 userLogout = async (req, res) => {
+  const lang = req.getLocale();
   try {
     //update token value to null in user's data
     await Users.updateOne({ id: req.userData.userId }).set({
       token: null,
     });
     res.status(rescode.OK).json({
-      message: msg.Logout,
+      message: msg1('Logout', lang),
     });
   } catch (error) {
     console.log(error);

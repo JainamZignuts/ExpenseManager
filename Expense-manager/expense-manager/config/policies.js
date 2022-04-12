@@ -19,21 +19,21 @@ module.exports.policies = {
 
   '*': 'getLang',
   UserController: {
-    'userLogout' : 'isAuthenticated',
+    'userLogout' : ['getLang','isAuthenticated'],
   },
   MemberController: {
-    '*': ['isAuthenticated','isAccountuser']
+    '*': ['getLang','isAuthenticated','isAccountuser']
   },
   AccountController: {
-    '*': 'isAuthenticated',
-    'getParticularAccount': ['isAuthenticated', 'isAccountuser'],
-    'updateAccount': ['isAuthenticated', 'isAccountuser'],
-    'deleteAccount': ['isAuthenticated', 'isAccountuser']
+    '*': ['getLang','isAuthenticated'],
+    'getParticularAccount': ['getLang','isAuthenticated', 'isAccountuser'],
+    'updateAccount': ['getLang','isAuthenticated', 'isAccountuser'],
+    'deleteAccount': ['getLang','isAuthenticated', 'isAccountuser']
   },
   TransactionsController: {
-    'GetTransactions': ['isAuthenticated', 'isAccountuser'],
-    'CreateTransaction': ['isAuthenticated', 'isAccountuser'],
-    'UpdateTransaction': ['isAuthenticated', 'isTransactionowner'],
-    'DeleteTransaction' : ['isAuthenticated', 'isTransactionowner'],
+    'GetTransactions': ['getLang','isAuthenticated', 'isAccountuser'],
+    'CreateTransaction': ['getLang','isAuthenticated', 'isAccountuser'],
+    'UpdateTransaction': ['getLang','isAuthenticated', 'isTransactionowner'],
+    'DeleteTransaction' : ['getLang','isAuthenticated', 'isTransactionowner'],
   }
 };

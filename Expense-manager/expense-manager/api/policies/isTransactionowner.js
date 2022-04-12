@@ -5,8 +5,10 @@
 
 const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Authorization;
+const msg1 = sails.config.getMessages;
 
 module.exports = async (req, res, proceed) => {
+  const lang = req.getLocale();
   try {
     const id = req.params.id;
     //find transaction from the id from url
@@ -33,17 +35,17 @@ module.exports = async (req, res, proceed) => {
       } else {
       //deny access to that user
         return res.status(rescode.FORBIDDEN).json({
-          message: msg.AccessDenied,
+          message: msg1('AccessDenied', lang),
         });
       }
     } else {
       return res.status(rescode.NOT_FOUND).json({
-        error: msg.TransactionNotFound
+        error: msg1('TransactionNotFound', lang)
       });
     }
   } catch (error) {
     return res.status(rescode.UNAUTHORIZED).json({
-      message: msg.AuthError,
+      message: msg1('AuthError', lang),
     });
   }
 };
