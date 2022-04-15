@@ -1,0 +1,517 @@
+{
+	"info": {
+		"_postman_id": "8f67ef68-8ae9-403f-b9eb-2ff82b1d3ec0",
+		"name": "Expense Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\":\"John\",\n    \"lastname\": \"Doe\",\n    \"email\":\"johndoe@gmail.com\",\n    \"password\": \"johndoe123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"johndoe@gmail.com\",\n    \"password\": \"johndoe123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjJmMjcwMDBkMWNhNDBkN2QyYjU1ZjAiLCJpYXQiOjE2NDc5MzExMjQsImV4cCI6MTY0NzkzNDcyNH0.-BWwvqrFtF7fp9C7QxyXGiJMFgIhRpFC0pstZU3369g",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:1337/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzQyNzgsImV4cCI6MTY0NjM3Nzg3OH0.LePBpzURM5ehpaeg1aKCgKGdsMW6WTDpz7d2L0PfUsw",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accountname\":\"Small trip\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/home",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get accounts for logged in user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhbm1heTEyMzQ1NkBnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjI3NWI2ODRlMmEyNTBmOTcwNzc4ZDciLCJpYXQiOjE2NDcyNDczNDgsImV4cCI6MTY0NzI1MDk0OH0.hOiB-A-5R3HX7qWrU_2RrvG-9mjdiPcB6_YG59BFHIg",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\":\"incomes\",\n    \"description\": \"added 1000\",\n    \"amount\": -1000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/home/transaction/create/62275b684e2a250f970778d8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"transaction",
+						"create",
+						"62275b684e2a250f970778d8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get particular account details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzcyMTksImV4cCI6MTY0NjM4MDgxOX0.0TJIu2meisg0WtOuxQi1ibgSyQbmosgJGFyMuGGbf7c",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:1337/home/account/6221ae54f698be0c070712c0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"account",
+						"6221ae54f698be0c070712c0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update account name",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzQyNzgsImV4cCI6MTY0NjM3Nzg3OH0.LePBpzURM5ehpaeg1aKCgKGdsMW6WTDpz7d2L0PfUsw",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accountname\":\"Girnar trip\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/home/update/6221b2911bccfd0c50bdc741",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"update",
+						"6221b2911bccfd0c50bdc741"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete account",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzcwNjMsImV4cCI6MTY0NjM4MDY2M30.teUvPuccg3J70kCCHcZi2HJtCWTDb5E41CkIC3zEl5Q",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:1337/home/delete/6221b2911bccfd0c50bdc741",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"delete",
+						"6221b2911bccfd0c50bdc741"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add member to account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzUwMjksImV4cCI6MTY0NjM3ODYyOX0.pjiXL2fSDnDZIJ_u3dcT8miZ2DZyTbmWOJocdxSkqXE",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"abhishek123@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/home/addmember/6221ae54f698be0c070712c0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"addmember",
+						"6221ae54f698be0c070712c0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete member",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzcyMTksImV4cCI6MTY0NjM4MDgxOX0.0TJIu2meisg0WtOuxQi1ibgSyQbmosgJGFyMuGGbf7c",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"abhishek123@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/home/deletemember/6221ae54f698be0c070712c0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"deletemember",
+						"6221ae54f698be0c070712c0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transactions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjJmMjcwMDBkMWNhNDBkN2QyYjU1ZjAiLCJpYXQiOjE2NDczMTk4ODksImV4cCI6MTY0NzMyMzQ4OX0.n1JUBZ6tE3UtNDsXIkIkZ5GYrQDs9L8O9Su6TZOpjjY",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:1337/home/account/622f27a10d1ca40d7d2b55f6/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"account",
+						"622f27a10d1ca40d7d2b55f6",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get transactions of particular account",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzODMyNTIsImV4cCI6MTY0NjM4Njg1Mn0.Z9K5eoAUVFzffbYDYvb_yIZarku8W2E7WQuNob7gwaI",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:1337/home/account/6221ae54f698be0c070712c0/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"account",
+						"6221ae54f698be0c070712c0",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Transaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzcwNjMsImV4cCI6MTY0NjM4MDY2M30.teUvPuccg3J70kCCHcZi2HJtCWTDb5E41CkIC3zEl5Q",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\":\"income\",\n    \"description\": \"got 200\",\n    \"amount\": 200\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/home/transaction/create/6221ae54f698be0c070712c0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"transaction",
+						"create",
+						"6221ae54f698be0c070712c0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Transaction",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzcyMTksImV4cCI6MTY0NjM4MDgxOX0.0TJIu2meisg0WtOuxQi1ibgSyQbmosgJGFyMuGGbf7c",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\":\"expense\",\n    \"description\": \"used 500\",\n    \"amount\": 500\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/home/transaction/update/6221b8801bccfd0c50bdc744",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"transaction",
+						"update",
+						"6221b8801bccfd0c50bdc744"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Transaction",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphaW5hbTEyM0BnbWFpbC5jb20iLCJ1c2VySWQiOiI2MjIxYTkxNTg3YTlhYTBiYjFhNTlkZmMiLCJpYXQiOjE2NDYzNzcyMTksImV4cCI6MTY0NjM4MDgxOX0.0TJIu2meisg0WtOuxQi1ibgSyQbmosgJGFyMuGGbf7c",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:1337/home/transaction/delete/6221bb5c0b3fec0cd79dfae8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"transaction",
+						"delete",
+						"6221bb5c0b3fec0cd79dfae8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "access denied to other users",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAZ21haWwuY29tIiwidXNlcklkIjoiNjIyMWE0YTg4N2E5YWEwYmIxYTU5ZGY5IiwiaWF0IjoxNjQ2Mzc2MDE3LCJleHAiOjE2NDYzNzk2MTd9.CUtrV_JBpEYMVgFtmKMzh3KMr5WB4CaE_MK9gVrywZ4",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accountname\":\"Goa trip\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1337/home/update/6221b2911bccfd0c50bdc741",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1337",
+					"path": [
+						"home",
+						"update",
+						"6221b2911bccfd0c50bdc741"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

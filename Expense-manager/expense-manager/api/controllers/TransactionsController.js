@@ -21,6 +21,13 @@ getTransactions = async (req, res) => {
     //finds transactions and sort by date descending
     let result = await Transactions.find({ where: { owneraccount: id }, sort: 'createdAt DESC' })
     .populate('user');
+    let d = new Date(result[0].createdAt);
+    let e = d.toLocaleString();
+    let f = new Date(Date.now());
+    let g = f.toLocaleString();
+    console.log(e);
+    console.log(g);
+    console.log(d < f);
     //if transaction found
     if(result.length > 0) {
       res.status(rescode.OK).json({
